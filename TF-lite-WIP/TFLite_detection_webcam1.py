@@ -1,7 +1,11 @@
+#1.3
+
 ######## Webcam Object Detection Using Tensorflow-trained Classifier #########
 #
 # Author: Evan Juras
+# Author: Arnav Purbiya
 # Date: 10/27/19
+# Update: 5/6/2024
 # Description: 
 # This program uses a TensorFlow Lite model to perform object detection on a live webcam
 # feed. It draws boxes and scores around the objects of interest in each frame from the
@@ -37,19 +41,21 @@ GPIO.setup(8, GPIO.OUT, initial=GPIO.HIGH)
 GPIO.setup(10, GPIO.OUT, initial=GPIO.HIGH)
 GPIO.setup(12, GPIO.OUT, initial=GPIO.HIGH)
 
-ser = serial.Serial('/dev/ttyACM0', 9600)
+ser = serial.Serial('/dev/ttyUSB0', 9600)
     
+
+# Function to send data to Arduino based on conditions
+def send_data_to_arduino(direction, box_size):
+    # Send direction and box size to Arduino
+    data_string = f"{direction},{box_size}"
+    ser.write(data_string.encode())
+    print(f"Sent data to Arduino: {data_string}")
 
 # Define VideoStream class to handle streaming of video from webcam in separate processing thread
 # Source - Adrian Rosebrock, PyImageSearch: https://www.pyimagesearch.com/2015/12/28/increasing-raspberry-pi-fps-with-python-and-opencv/
 class VideoStream:
 
-    # Function to send data to Arduino based on conditions
-    def send_data_to_arduino(direction, box_size):
-        # Send direction and box size to Arduino
-        data_string = f"{direction},{box_size}"
-        ser.write(data_string.encode())
-        print(f"Sent data to Arduino: {data_string}")
+    
 
 
     """Camera object that controls video streaming from the Picamera"""
@@ -288,31 +294,37 @@ while True:
 
     if object_name == "person":
         #GPIO.output(11, GPIO.HIGH)
-        if object_center_x < frame_center_x:
+        if object_center_x > frame_center_x:
             # Person is on the left
-            direction = "L"
+            direction = "R"
             send_data_to_arduino(direction, box_sizes)
             if box_height < far_threshold:
-                GPIO.output(15, GPIO.LOW)
+                GPIO.output(13, GPIO.LOW)#gree
                 time.sleep(0.5)
-                GPIO.output(15, GPIO.HIGH)
-                GPIO.output(11, GPIO.HIGH)
-                GPIO.output(13, GPIO.HIGH)
+                GPIO.output(15, GPIO.HIGH)#blue
+                GPIO.output(11, GPIO.HIGH)#red
+                GPIO.output(13, GPIO.HIGH)#gree
+                print(f"g")
+
 
             elif far_threshold <= box_height < near_threshold:
-                GPIO.output(15, GPIO.LOW)
-                GPIO.output(11, GPIO.LOW)
-                GPIO.output(13, GPIO.HIGH)
+                GPIO.output(15, GPIO.HIGH)#blue
+                GPIO.output(11, GPIO.LOW)#red
+                GPIO.output(13, GPIO.LOW)#gree
+                print(f"g + r")
                 
             else:
                 GPIO.output(15, GPIO.HIGH) #blue
                 GPIO.output(11, GPIO.LOW) #red
                 GPIO.output(13, GPIO.HIGH) #green
+                time.sleep(0.5)
+                GPIO.output(11, GPIO.HIGH) #red
+                print(f"r")
                 
                 
         else:
             # Person is on the right
-            direction = "R"
+            direction = "L"
             send_data_to_arduino(direction, box_sizes)
             if box_height < far_threshold:
                 GPIO.output(8, GPIO.HIGH)
@@ -333,13 +345,13 @@ while True:
         direction = "X"
         send_data_to_arduino(direction, 100)
         GPIO.output(8, GPIO.HIGH)
-        GPIO.output(15, GPIO.HIGH)
+        GPIO.output(15, GPIO.HIGH) #blue
         
         GPIO.output(10, GPIO.HIGH)
-        GPIO.output(11, GPIO.HIGH)
+        GPIO.output(11, GPIO.HIGH) #red
 
         GPIO.output(12, GPIO.HIGH)
-        GPIO.output(13, GPIO.HIGH)
+        GPIO.output(13, GPIO.HIGH) #green
         
 
     
@@ -359,6 +371,13 @@ while True:
         break
 
 # Clean up
+GPIO.output(8, GPIO.HIGH)
+GPIO.output(15, GPIO.HIGH) #blue
+GPIO.output(10, GPIO.HIGH)
+GPIO.output(11, GPIO.HIGH) #red
+GPIO.output(12, GPIO.HIGH)
+GPIO.output(13, GPIO.HIGH) #green
+
 cv2.destroyAllWindows()
 videostream.stop()
 #new2
