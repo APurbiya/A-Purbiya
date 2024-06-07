@@ -33,15 +33,15 @@ import RPi.GPIO as GPIO
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(11, GPIO.OUT, initial=GPIO.HIGH)
-GPIO.setup(13, GPIO.OUT, initial=GPIO.HIGH)
-GPIO.setup(15, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(11, GPIO.OUT, initial=GPIO.HIGH) #Red
+GPIO.setup(13, GPIO.OUT, initial=GPIO.HIGH) #Green
+GPIO.setup(15, GPIO.OUT, initial=GPIO.HIGH) #Red
 
 GPIO.setup(8, GPIO.OUT, initial=GPIO.HIGH)
 GPIO.setup(10, GPIO.OUT, initial=GPIO.HIGH)
 GPIO.setup(12, GPIO.OUT, initial=GPIO.HIGH)
 
-ser = serial.Serial('/dev/ttyUSB0', 9600)
+ser = serial.Serial('/dev/ttyUSB0', 9600) #/dev/ttyUSB0
     
 
 # Function to send data to Arduino based on conditions
@@ -278,12 +278,13 @@ while True:
 
     #------------------------------------------------------------ADDED-------------------------------------------------------------
     # Define thresholds for bounding box sizes (in pixels)
-    far_threshold = 100  # Example threshold for far distance
-    near_threshold = 200  # Example threshold for near distance
+    far_threshold = 2325  # Example threshold for far distance
+    near_threshold = 20000  # Example threshold for near distance
 
     # Get the height of the bounding box (assuming it's a square box)
-    box_height = ymax - ymin  # Calculate the height of the bounding box
     box_width = xmax - xmin  # Calculate the height of the bounding box
+    box_height = ymax - ymin  # Calculate the height of the bounding box
+    
     box_sizes = box_height * box_width
     # Classify the distance based on the size of the bounding box
     
@@ -343,7 +344,7 @@ while True:
     else:
         
         direction = "X"
-        send_data_to_arduino(direction, 100)
+        send_data_to_arduino(direction, 0)
         GPIO.output(8, GPIO.HIGH)
         GPIO.output(15, GPIO.HIGH) #blue
         

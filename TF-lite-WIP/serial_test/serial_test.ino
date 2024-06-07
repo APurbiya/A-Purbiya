@@ -44,10 +44,17 @@ void loop() {
       for (int i = 6; i < NUM_LEDS; i++) {
         strip.setPixelColor(i, getColor(boxSize));
       }
-    } else if (direction == 'R') {
+    } 
+    else if (direction == 'R') {
       // Turn on lights 0-5
       for (int i = 0; i < 6; i++) {
         strip.setPixelColor(i, getColor(boxSize));
+      }
+    }
+    else if (direction == 'X')
+    {
+      for (int i = 0; i < 11; i++) {
+        strip.setPixelColor(i, strip.Color(255, 0, 0));
       }
     }
 
@@ -79,11 +86,11 @@ void loop() {
 
 // Function to determine LED color based on box size
 uint32_t getColor(int boxSize) {
-  if (boxSize > 1000) {
+  if (boxSize > 2000) {
     Serial.println("Green");
     return strip.Color(0, 255, 0); // Green
   } 
-  else if (boxSize < 5000 && boxSize > 1001) {
+  else if (boxSize < 7000 && boxSize > 2001) {
     Serial.println("Yellow");
     return strip.Color(255, 255, 0); // Yellow
   } 
