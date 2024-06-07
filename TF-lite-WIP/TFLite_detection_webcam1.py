@@ -22,20 +22,36 @@ import sys
 import time
 from threading import Thread
 import importlib.util
+import serial
 
 #------------------------------------------------------------ADDED-------------------------------------------------------------
 import RPi.GPIO as GPIO
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(11, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(11, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(13, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(15, GPIO.OUT, initial=GPIO.HIGH)
 
+GPIO.setup(8, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(10, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(12, GPIO.OUT, initial=GPIO.HIGH)
+
+ser = serial.Serial('/dev/ttyACM0', 9600)
     
 
 # Define VideoStream class to handle streaming of video from webcam in separate processing thread
 # Source - Adrian Rosebrock, PyImageSearch: https://www.pyimagesearch.com/2015/12/28/increasing-raspberry-pi-fps-with-python-and-opencv/
 class VideoStream:
+
+    # Function to send data to Arduino based on conditions
+    def send_data_to_arduino(direction, box_size):
+        # Send direction and box size to Arduino
+        data_string = f"{direction},{box_size}"
+        ser.write(data_string.encode())
+        print(f"Sent data to Arduino: {data_string}")
+
+
     """Camera object that controls video streaming from the Picamera"""
     def __init__(self,resolution=(640,480),framerate=30):
         # Initialize the PiCamera and the camera image stream
@@ -75,6 +91,7 @@ class VideoStream:
 	# Indicate that the camera and thread should be stopped
         self.stopped = True
 
+    
 # Define and parse input arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--modeldir', help='Folder the .tflite file is located in',
@@ -197,43 +214,54 @@ while True:
     scores = interpreter.get_tensor(output_details[2]['index'])[0] # Confidence of detected objects
     #num = interpreter.get_tensor(output_details[3]['index'])[0]  # Total number of detected objects (inaccurate and not needed)
     object_name = ""
-    
+    object_center_x = 0
+    frame_center_x = 0
+    center_x = 0
+    ymin = 0
+    xmin = 0
+    ymax = 0
+    xmax = 0
+                
     # Loop over all detections and draw detection box if confidence is above minimum threshold
     for i in range(len(scores)):
         if ((scores[i] > min_conf_threshold) and (scores[i] <= 1.0)):
             # Get bounding box coordinates
-            ymin = int(max(1,(boxes[i][0] * imH)))
-            xmin = int(max(1,(boxes[i][1] * imW)))
-            ymax = int(min(imH,(boxes[i][2] * imH)))
-            xmax = int(min(imW,(boxes[i][3] * imW)))
-            
-            # Calculate the center of the detected object
-            object_center_x = (xmin + xmax) // 2
-            
-            # Calculate the center of the frame
-            frame_center_x = imW // 2
-            
-            # Calculate the center of the frame
-            center_x = imW // 2
+            object_name = labels[int(classes[i])]
 
-            # Draw a line at the center of the frame
-            cv2.line(frame, (center_x, 0), (center_x, imH), (255, 0, 0), 2)
+            # Check if the detected object is one of the classes of interest
+            if object_name in ["person", "car", "truck", "bicycle"]:
+                ymin = int(max(1,(boxes[i][0] * imH)))
+                xmin = int(max(1,(boxes[i][1] * imW)))
+                ymax = int(min(imH,(boxes[i][2] * imH)))
+                xmax = int(min(imW,(boxes[i][3] * imW)))
+                
+                # Calculate the center of the detected object
+                object_center_x = (xmin + xmax) // 2
+                
+                # Calculate the center of the frame
+                frame_center_x = imW // 2
+                
+                # Calculate the center of the frame
+                center_x = imW // 2
 
-            # Determine if the person is on the left or right
-            
+                # Draw a line at the center of the frame
+                cv2.line(frame, (center_x, 0), (center_x, imH), (255, 0, 0), 2)
+
+                # Determine if the person is on the left or right
+                
+                
+                    
+                # Set PIN 11 (GPIO output) based on person detection
             
                 
-            # Set PIN 11 (GPIO output) based on person detection
-        
-            
-            # Draw bounding box and label
-            cv2.rectangle(frame, (xmin,ymin), (xmax,ymax), (10, 255, 0), 2)
-            object_name = labels[int(classes[i])]
-            label = '%s: %d%%' % (object_name, int(scores[i]*100))
-            labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
-            label_ymin = max(ymin, labelSize[1] + 10)
-            cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED)
-            cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
+                # Draw bounding box and label
+                cv2.rectangle(frame, (xmin,ymin), (xmax,ymax), (10, 255, 0), 2)
+                object_name = labels[int(classes[i])]
+                label = '%s: %d%%' % (object_name, int(scores[i]*100))
+                labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
+                label_ymin = max(ymin, labelSize[1] + 10)
+                cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED)
+                cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
 
 
     # Draw framerate in corner of frame
@@ -243,51 +271,82 @@ while True:
     cv2.imshow('Object detector', frame)
 
     #------------------------------------------------------------ADDED-------------------------------------------------------------
+    # Define thresholds for bounding box sizes (in pixels)
+    far_threshold = 100  # Example threshold for far distance
+    near_threshold = 200  # Example threshold for near distance
+
+    # Get the height of the bounding box (assuming it's a square box)
+    box_height = ymax - ymin  # Calculate the height of the bounding box
+    box_width = xmax - xmin  # Calculate the height of the bounding box
+    box_sizes = box_height * box_width
+    # Classify the distance based on the size of the bounding box
+    
+
+    
     #you will need to edit this object name check to something that actually exists in the TensorFlow model
+    direction = ""
+
     if object_name == "person":
         #GPIO.output(11, GPIO.HIGH)
-        # Calculate the distance metric based on the size of the bounding box
-        # Define thresholds for bounding box sizes (in pixels)
-        far_threshold = 100  # Example threshold for far distance
-        near_threshold = 200  # Example threshold for near distance
-
-        # Get the height of the bounding box (assuming it's a square box)
-        box_height = ymax - ymin  # Calculate the height of the bounding box
-        box_width = xmax - xmin  # Calculate the width of the bounding box
-
-        # Calculate the distance metric based on the size of the bounding box
-        # Assuming larger bounding box means closer distance
-        # You can adjust this logic based on your specific requirements
-        distance_metric = 1 - (box_height / imH)  # Normalize to range [0, 1]
-
-        # Print or use the distance metric as needed
-        print("Distance Metric:", distance_metric)
-
-        # Classify the distance based on the size of the bounding box
-        if box_height < far_threshold:
-            distance_category = "Far"
-        elif far_threshold <= box_height < near_threshold:
-            distance_category = "Near"
-        else:
-            distance_category = "Close"
-
-        # Print or use the distance category as needed
-        print("Distance Category:", distance_category)
-        
         if object_center_x < frame_center_x:
             # Person is on the left
-            GPIO.output(11, GPIO.HIGH)
-            GPIO.output(12, GPIO.LOW)
+            direction = "L"
+            send_data_to_arduino(direction, box_sizes)
+            if box_height < far_threshold:
+                GPIO.output(15, GPIO.LOW)
+                time.sleep(0.5)
+                GPIO.output(15, GPIO.HIGH)
+                GPIO.output(11, GPIO.HIGH)
+                GPIO.output(13, GPIO.HIGH)
+
+            elif far_threshold <= box_height < near_threshold:
+                GPIO.output(15, GPIO.LOW)
+                GPIO.output(11, GPIO.LOW)
+                GPIO.output(13, GPIO.HIGH)
+                
+            else:
+                GPIO.output(15, GPIO.HIGH) #blue
+                GPIO.output(11, GPIO.LOW) #red
+                GPIO.output(13, GPIO.HIGH) #green
+                
+                
         else:
             # Person is on the right
-            GPIO.output(11, GPIO.LOW)
-            GPIO.output(12, GPIO.HIGH)
+            direction = "R"
+            send_data_to_arduino(direction, box_sizes)
+            if box_height < far_threshold:
+                GPIO.output(8, GPIO.HIGH)
+                GPIO.output(10, GPIO.LOW)
+                GPIO.output(12, GPIO.HIGH)
+                
+            elif far_threshold <= box_height < near_threshold:
+                GPIO.output(8, GPIO.LOW)
+                GPIO.output(10, GPIO.LOW)
+                GPIO.output(12, GPIO.HIGH)
+                
+            else:
+                GPIO.output(8, GPIO.LOW)
+                GPIO.output(10, GPIO.HIGH)
+                GPIO.output(12, GPIO.HIGH)
     else:
-        GPIO.output(11, GPIO.LOW)
-        GPIO.output(12, GPIO.LOW)
+        
+        direction = "X"
+        send_data_to_arduino(direction, 100)
+        GPIO.output(8, GPIO.HIGH)
+        GPIO.output(15, GPIO.HIGH)
+        
+        GPIO.output(10, GPIO.HIGH)
+        GPIO.output(11, GPIO.HIGH)
+
+        GPIO.output(12, GPIO.HIGH)
+        GPIO.output(13, GPIO.HIGH)
+        
 
     
 
+    # Print or use the distance category as needed
+    #print("Distance Category: ", distance_category)
+    #print("Distance Num " , box_height , "  " , box_height, " ", box_width)
 
 
     # Calculate framerate
@@ -302,3 +361,4 @@ while True:
 # Clean up
 cv2.destroyAllWindows()
 videostream.stop()
+#new2
