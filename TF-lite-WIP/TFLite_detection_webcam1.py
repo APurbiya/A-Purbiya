@@ -1,5 +1,3 @@
-#1.3
-
 ######## Webcam Object Detection Using Tensorflow-trained Classifier #########
 #
 # Author: Evan Juras
@@ -55,9 +53,6 @@ def send_data_to_arduino(direction, box_size):
 # Source - Adrian Rosebrock, PyImageSearch: https://www.pyimagesearch.com/2015/12/28/increasing-raspberry-pi-fps-with-python-and-opencv/
 class VideoStream:
 
-    
-
-
     """Camera object that controls video streaming from the Picamera"""
     def __init__(self,resolution=(640,480),framerate=30):
         # Initialize the PiCamera and the camera image stream
@@ -69,11 +64,11 @@ class VideoStream:
         # Read first frame from the stream
         (self.grabbed, self.frame) = self.stream.read()
 
-	# Variable to control when the camera is stopped
+        # Variable to control when the camera is stopped
         self.stopped = False
 
     def start(self):
-	# Start the thread that reads frames from the video stream
+        # Start the thread that reads frames from the video stream
         Thread(target=self.update,args=()).start()
         return self
 
@@ -90,14 +85,13 @@ class VideoStream:
             (self.grabbed, self.frame) = self.stream.read()
 
     def read(self):
-	# Return the most recent frame
+        # Return the most recent frame
         return self.frame
 
     def stop(self):
-	# Indicate that the camera and thread should be stopped
+        # Indicate that the camera and thread should be stopped
         self.stopped = True
 
-    
 # Define and parse input arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--modeldir', help='Folder the .tflite file is located in',
@@ -113,7 +107,7 @@ parser.add_argument('--resolution', help='Desired webcam resolution in WxH. If t
 parser.add_argument('--edgetpu', help='Use Coral Edge TPU Accelerator to speed up detection',
                     action='store_true')
 
-args = parser.parse_args()
+args = parser.parseArgs()
 
 MODEL_NAME = args.modeldir
 GRAPH_NAME = args.graph
@@ -274,7 +268,7 @@ while True:
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
 
     # All the results have been drawn on the frame, so it's time to display it.
-    cv2.imshow('Object detector', frame)
+    #cv2.imshow('Object detector', frame)
 
     #------------------------------------------------------------ADDED-------------------------------------------------------------
     # Define thresholds for bounding box sizes (in pixels)
@@ -368,8 +362,8 @@ while True:
     frame_rate_calc= 1/time1
 
     # Press 'q' to quit
-    if cv2.waitKey(1) == ord('q'):
-        break
+    #if cv2.waitKey(1) == ord('q'):
+    #    break
 
 # Clean up
 GPIO.output(8, GPIO.HIGH)
@@ -379,6 +373,6 @@ GPIO.output(11, GPIO.HIGH) #red
 GPIO.output(12, GPIO.HIGH)
 GPIO.output(13, GPIO.HIGH) #green
 
-cv2.destroyAllWindows()
-videostream.stop()
-#new2
+#cv2.destroyAllWindows()
+#videostream.stop()
+#4.4.4.2.2.
