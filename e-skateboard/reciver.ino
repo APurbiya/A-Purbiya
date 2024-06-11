@@ -7,10 +7,11 @@ Servo myServo; // Create servo object to control a servo
 void setup() {
   // Initialize Serial Monitor
   Serial.begin(9600);
-  Serial.println("ENTER AT Commands:");
+  //no need
+  //Serial.println("ENTER AT Commands:");
 
   // Initialize Bluetooth Serial Port
-  hc06.begin(9600);
+  hc05.begin(9600);
 
   // Set pin 3 as GND and pin 4 as VCC
   pinMode(3, OUTPUT);
@@ -27,7 +28,7 @@ void setup() {
 
 void loop() {
   // Write data from HC06 to Serial Monitor
-  if (hc06.available()) {
+  if (hc05.available()) {
     char receivedChar = hc06.read();
     Serial.println(receivedChar);
     Serial.write(receivedChar);
@@ -48,4 +49,5 @@ void loop() {
   if (Serial.available()) {
     hc06.write(Serial.read());
   }
+  delay(10);//to make sure it does not switch to fast.
 }
