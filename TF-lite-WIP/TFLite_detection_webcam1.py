@@ -275,48 +275,62 @@ while True:
     far_threshold = 2325  # Example threshold for far distance
     near_threshold = 20000  # Example threshold for near distance
 
-    # Get the height of the bounding box (assuming it's a square box)
-    box_width = xmax - xmin  # Calculate the height of the bounding box
-    box_height = ymax - ymin  # Calculate the height of the bounding box
-    
+    # Calculate frame center (assuming you have frame_width and frame_height defined)
+    frame_center_x = frame_width // 2
+
+    # Get the center of the bounding box
+    object_center_x = (xmin + xmax) // 2
+
+    # Calculate box width and height
+    box_width = xmax - xmin
+    box_height = ymax - ymin
+
     box_sizes = box_height * box_width
+
     # Classify the distance based on the size of the bounding box
-    
-
-    
-    #you will need to edit this object name check to something that actually exists in the TensorFlow model
-    direction = ""
-
-    if object_name == "person":
-        #GPIO.output(11, GPIO.HIGH)
-        if object_center_x > frame_center_x:
+    if object_name in objects_to_detect:
+        if abs(object_center_x - frame_center_x) < 0.1 * frame_width:  # Adjust this threshold as needed
+            # Object is pretty centered
+            direction = "C"
+            send_data_to_arduino(direction, box_sizes)
+            
+            # Light up both sides based on distance
+            if box_height < far_threshold:
+                GPIO.output(8, GPIO.LOW)   # Green
+                GPIO.output(10, GPIO.LOW)  # Blue
+                GPIO.output(12, GPIO.HIGH) # Red
+                GPIO.output(13, GPIO.LOW)  # Green
+            elif far_threshold <= box_height < near_threshold:
+                GPIO.output(8, GPIO.LOW)   # Green
+                GPIO.output(10, GPIO.HIGH) # Blue
+                GPIO.output(12, GPIO.LOW)  # Red
+                GPIO.output(13, GPIO.LOW)  # Green
+            else:
+                GPIO.output(8, GPIO.LOW)   # Green
+                GPIO.output(10, GPIO.LOW)  # Blue
+                GPIO.output(12, GPIO.LOW)  # Red
+                GPIO.output(13, GPIO.LOW)  # Green
+                
+            print("Object centered: both sides lit up")
+        elif object_center_x > frame_center_x:
             # Person is on the left
             direction = "R"
             send_data_to_arduino(direction, box_sizes)
             if box_height < far_threshold:
-                GPIO.output(13, GPIO.LOW)#gree
-                time.sleep(0.5)
-                GPIO.output(15, GPIO.HIGH)#blue
-                GPIO.output(11, GPIO.HIGH)#red
-                GPIO.output(13, GPIO.HIGH)#gree
-                print(f"g")
-
-
+                GPIO.output(8, GPIO.HIGH)
+                GPIO.output(10, GPIO.LOW)
+                GPIO.output(12, GPIO.HIGH)
+                GPIO.output(13, GPIO.HIGH)
             elif far_threshold <= box_height < near_threshold:
-                GPIO.output(15, GPIO.HIGH)#blue
-                GPIO.output(11, GPIO.LOW)#red
-                GPIO.output(13, GPIO.LOW)#gree
-                print(f"g + r")
-                
+                GPIO.output(8, GPIO.LOW)
+                GPIO.output(10, GPIO.LOW)
+                GPIO.output(12, GPIO.HIGH)
+                GPIO.output(13, GPIO.HIGH)
             else:
-                GPIO.output(15, GPIO.HIGH) #blue
-                GPIO.output(11, GPIO.LOW) #red
-                GPIO.output(13, GPIO.HIGH) #green
-                time.sleep(0.5)
-                GPIO.output(11, GPIO.HIGH) #red
-                print(f"r")
-                
-                
+                GPIO.output(8, GPIO.LOW)
+                GPIO.output(10, GPIO.HIGH)
+                GPIO.output(12, GPIO.HIGH)
+                GPIO.output(13, GPIO.HIGH)
         else:
             # Person is on the right
             direction = "L"
@@ -325,28 +339,25 @@ while True:
                 GPIO.output(8, GPIO.HIGH)
                 GPIO.output(10, GPIO.LOW)
                 GPIO.output(12, GPIO.HIGH)
-                
+                GPIO.output(13, GPIO.LOW)
             elif far_threshold <= box_height < near_threshold:
                 GPIO.output(8, GPIO.LOW)
                 GPIO.output(10, GPIO.LOW)
                 GPIO.output(12, GPIO.HIGH)
-                
+                GPIO.output(13, GPIO.LOW)
             else:
                 GPIO.output(8, GPIO.LOW)
                 GPIO.output(10, GPIO.HIGH)
                 GPIO.output(12, GPIO.HIGH)
+                GPIO.output(13, GPIO.LOW)
     else:
-        
         direction = "X"
         send_data_to_arduino(direction, 0)
         GPIO.output(8, GPIO.HIGH)
-        GPIO.output(15, GPIO.HIGH) #blue
-        
         GPIO.output(10, GPIO.HIGH)
-        GPIO.output(11, GPIO.HIGH) #red
-
         GPIO.output(12, GPIO.HIGH)
-        GPIO.output(13, GPIO.HIGH) #green
+        GPIO.output(13, GPIO.HIGH)
+
         
 
     
@@ -375,4 +386,4 @@ GPIO.output(13, GPIO.HIGH) #green
 
 #cv2.destroyAllWindows()
 #videostream.stop()
-#4.4.4.2.2.
+#5.5.5
