@@ -16,6 +16,7 @@
 # I added my own method of drawing boxes and labels using OpenCV.
 
 # Import packages
+#version 1.1
 import os
 import argparse
 import cv2
@@ -107,7 +108,7 @@ parser.add_argument('--resolution', help='Desired webcam resolution in WxH. If t
 parser.add_argument('--edgetpu', help='Use Coral Edge TPU Accelerator to speed up detection',
                     action='store_true')
 
-args = parser.parseArgs()
+args = parser.parse_args()
 
 MODEL_NAME = args.modeldir
 GRAPH_NAME = args.graph
@@ -287,79 +288,176 @@ while True:
     #you will need to edit this object name check to something that actually exists in the TensorFlow model
     direction = ""
 
-    if object_name in ["person", "car", "truck", "bicycle"]:
-        if object_center_x > frame_center_x:
-            # Object is on the left
-            direction = "R"
-            send_data_to_arduino(direction, box_sizes)
-            
-            # Turn off right side lights
-            GPIO.output(8, GPIO.HIGH)
-            GPIO.output(10, GPIO.HIGH)
-            GPIO.output(12, GPIO.HIGH)
-            
-            if box_height < far_threshold:
-                GPIO.output(13, GPIO.LOW)  # green
-                time.sleep(0.5)
-                GPIO.output(15, GPIO.HIGH)  # blue
-                GPIO.output(11, GPIO.HIGH)  # red
-                GPIO.output(13, GPIO.HIGH)  # green
-                print(f"g")
-            
-            elif far_threshold <= box_height < near_threshold:
-                GPIO.output(15, GPIO.HIGH)  # blue
-                GPIO.output(11, GPIO.LOW)  # red
-                GPIO.output(13, GPIO.LOW)  # green
-                print(f"g + r")
-            
-            else:
-                GPIO.output(15, GPIO.HIGH)  # blue
-                GPIO.output(11, GPIO.LOW)  # red
-                GPIO.output(13, GPIO.HIGH)  # green
-                time.sleep(0.5)
-                GPIO.output(11, GPIO.HIGH)  # red
-                print(f"r")
-            
-        else:
-            # Object is on the right
-            direction = "L"
-            send_data_to_arduino(direction, box_sizes)
-            
-            # Turn off left side lights
-            GPIO.output(11, GPIO.HIGH)  # red
-            GPIO.output(13, GPIO.HIGH)  # green
-            GPIO.output(15, GPIO.HIGH)  # blue
-            
-            if box_height < far_threshold:
-                GPIO.output(8, GPIO.HIGH)  # right green
-                GPIO.output(10, GPIO.LOW)  # right red
-                GPIO.output(12, GPIO.HIGH)  # right blue
-            
-            elif far_threshold <= box_height < near_threshold:
-                GPIO.output(8, GPIO.LOW)  # right green
-                GPIO.output(10, GPIO.LOW)  # right red
-                GPIO.output(12, GPIO.HIGH)  # right blue
-            
-            else:
-                GPIO.output(8, GPIO.LOW)  # right green
-                GPIO.output(10, GPIO.HIGH)  # right red
-                GPIO.output(12, GPIO.HIGH)  # right blue
+    center_margin = 50  # Margin around the center of the frame to consider the object as "centered"
 
+    if object_name in ["person", "car", "truck", "bicycle"]:
+        
+
+        #GPIO.output(11, GPIO.HIGH)
+        if abs(object_center_x - frame_center_x) < center_margin:
+            direction = "C"  # Object is relatively in the center
+        elif object_center_x > frame_center_x + center_margin:
+            direction = "R"  # Object is on the right
+        elif object_center_x < frame_center_x - center_margin:
+            direction = "L"  # Object is on the left
+
+        
+        send_data_to_arduino(direction, box_sizes)
+        
+        if direction == "C":
+            if box_sizes < far_threshold:
+                GPIO.output(8, GPIO.LOW)#green
+                GPIO.output(10, GPIO.HIGH)#red
+                GPIO.output(12, GPIO.HIGH)#blue
+                
+                GPIO.output(15, GPIO.HIGH)#blue
+                GPIO.output(11, GPIO.HIGH)#red
+                GPIO.output(13, GPIO.LOW)#green
+
+                time.sleep(0.5)
+                GPIO.output(15, GPIO.HIGH)#blue
+                GPIO.output(11, GPIO.HIGH)#red
+                GPIO.output(13, GPIO.HIGH)#green
+
+                GPIO.output(8, GPIO.HIGH)#green
+                GPIO.output(10, GPIO.HIGH)#red
+                GPIO.output(12, GPIO.HIGH)#blue
+                print(f"g")
+
+            elif far_threshold <= box_sizes < near_threshold:
+                GPIO.output(15, GPIO.LOW)#blue
+                GPIO.output(11, GPIO.HIGH)#red
+                GPIO.output(13, GPIO.HIGH)#green
+
+                GPIO.output(8, GPIO.HIGH) #green
+                GPIO.output(10, GPIO.HIGH) #red
+                GPIO.output(12, GPIO.LOW)#blue
+
+                time.sleep(0.4)
+
+                GPIO.output(12, GPIO.HIGH)#blue
+                GPIO.output(15, GPIO.HIGH)#blue
+
+                print(f"b")
+
+            else:
+                GPIO.output(15, GPIO.HIGH) #blue
+                GPIO.output(11, GPIO.LOW) #red
+                GPIO.output(13, GPIO.HIGH) #green
+
+                GPIO.output(8, GPIO.LOW) #green
+                GPIO.output(10, GPIO.HIGH) #red
+                GPIO.output(12, GPIO.HIGH) #blue
+
+                time.sleep(0.2)
+
+                GPIO.output(11, GPIO.HIGH) #red
+                GPIO.output(8, GPIO.HIGH) #red
+                print(f"r")
+
+        elif direction == "L":
+            if box_sizes < far_threshold:
+                GPIO.output(8, GPIO.LOW)#green
+                GPIO.output(10, GPIO.HIGH)#red
+                GPIO.output(12, GPIO.HIGH)#blue
+                
+                GPIO.output(15, GPIO.HIGH)#blue
+                GPIO.output(11, GPIO.HIGH)#red
+                GPIO.output(13, GPIO.HIGH)#green
+
+                time.sleep(0.5)
+                GPIO.output(15, GPIO.HIGH)#blue
+                GPIO.output(11, GPIO.HIGH)#red
+                GPIO.output(13, GPIO.HIGH)#green
+
+                GPIO.output(8, GPIO.HIGH)#green
+                GPIO.output(10, GPIO.HIGH)#red
+                GPIO.output(12, GPIO.HIGH)#blue
+
+            elif far_threshold <= box_height < near_threshold:
+                GPIO.output(15, GPIO.HIGH)#blue
+                GPIO.output(11, GPIO.HIGH)#red
+                GPIO.output(13, GPIO.HIGH)#green
+
+                GPIO.output(8, GPIO.HIGH) #green
+                GPIO.output(10, GPIO.HIGH) #red
+                GPIO.output(12, GPIO.LOW)#blue
+
+                time.sleep(0.4)
+
+                GPIO.output(12, GPIO.HIGH)#blue
+                GPIO.output(15, GPIO.HIGH)#blue
+            else:
+                GPIO.output(15, GPIO.HIGH) #blue
+                GPIO.output(11, GPIO.HIGH) #red
+                GPIO.output(13, GPIO.HIGH) #green
+
+                GPIO.output(8, GPIO.LOW) #green
+                GPIO.output(10, GPIO.HIGH) #red
+                GPIO.output(12, GPIO.HIGH) #blue
+
+                time.sleep(0.2)
+
+                GPIO.output(11, GPIO.HIGH) #red
+                GPIO.output(8, GPIO.HIGH) #red
+
+        elif direction == "R":
+            if box_sizes < far_threshold:
+                GPIO.output(8, GPIO.HIGH)#green
+                GPIO.output(10, GPIO.HIGH)#red
+                GPIO.output(12, GPIO.HIGH)#blue
+                
+                GPIO.output(15, GPIO.HIGH)#blue
+                GPIO.output(11, GPIO.HIGH)#red
+                GPIO.output(13, GPIO.LOW)#green
+
+                time.sleep(0.5)
+                GPIO.output(15, GPIO.HIGH)#blue
+                GPIO.output(11, GPIO.HIGH)#red
+                GPIO.output(13, GPIO.HIGH)#green
+
+                GPIO.output(8, GPIO.HIGH)#green
+                GPIO.output(10, GPIO.HIGH)#red
+                GPIO.output(12, GPIO.HIGH)#blue
+                print(f"g")
+            elif far_threshold <= box_sizes < near_threshold:
+                GPIO.output(15, GPIO.LOW)#blue
+                GPIO.output(11, GPIO.HIGH)#red
+                GPIO.output(13, GPIO.HIGH)#green
+
+                GPIO.output(8, GPIO.HIGH) #green
+                GPIO.output(10, GPIO.HIGH) #red
+                GPIO.output(12, GPIO.HIGH)#blue
+
+                time.sleep(0.4)
+
+                GPIO.output(12, GPIO.HIGH)#blue
+                GPIO.output(15, GPIO.HIGH)#blue
+            else:
+                GPIO.output(15, GPIO.HIGH) #blue
+                GPIO.output(11, GPIO.LOW) #red
+                GPIO.output(13, GPIO.HIGH) #green
+
+                GPIO.output(8, GPIO.HIGH) #green
+                GPIO.output(10, GPIO.HIGH) #red
+                GPIO.output(12, GPIO.HIGH) #blue
+
+                time.sleep(0.2)
+
+                GPIO.output(11, GPIO.HIGH) #red
+                GPIO.output(8, GPIO.HIGH) #red
+                print(f"r")
+                
     else:
         direction = "X"
         send_data_to_arduino(direction, 0)
         GPIO.output(8, GPIO.HIGH)
-        GPIO.output(15, GPIO.HIGH)  # blue
-        
+        GPIO.output(15, GPIO.HIGH) #blue
         GPIO.output(10, GPIO.HIGH)
-        GPIO.output(11, GPIO.HIGH)  # red
-
+        GPIO.output(11, GPIO.HIGH) #red
         GPIO.output(12, GPIO.HIGH)
-        GPIO.output(13, GPIO.HIGH)  # green
-
+        GPIO.output(13, GPIO.HIGH) #green
         
-
-    
 
     # Print or use the distance category as needed
     #print("Distance Category: ", distance_category)
@@ -385,4 +483,4 @@ GPIO.output(13, GPIO.HIGH) #green
 
 #cv2.destroyAllWindows()
 #videostream.stop()
-#4.4
+#6.1
