@@ -53,12 +53,24 @@ for x in range(0,len(buttons)):
 
 while True:
     if key[0].value:
-        keyboard.send(Keycode.ZERO)
+        #keyboard.send(Keycode.ZERO)
+        keyboard.send(Keycode.WINDOWS)
+        time.sleep(0.1)
+        write_text.write('Chrome')
+        time.sleep(0.1)
+        write_text.write(' \n')
+        #Keyboard.send()
         time.sleep(0.1)
         
     if key[1].value:
-        keyboard.send(Keycode.ONE)
+        keyboard.send(Keycode.WINDOWS)
         time.sleep(0.1)
+        write_text.write('Spotify')
+        time.sleep(0.1)
+        write_text.write(' \n')
+        #Keyboard.send()
+        time.sleep(0.1)
+        
         
     if key[2].value:
         keyboard.send(Keycode.TWO)
