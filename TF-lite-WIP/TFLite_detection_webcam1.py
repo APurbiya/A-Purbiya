@@ -14,6 +14,7 @@
 # https://github.com/tensorflow/tensorflow/blob/master/tensorflow/lite/examples/python/label_image.py
 #
 # I added my own method of drawing boxes and labels using OpenCV.
+# I also added functions to get distance and send direction and distance to the arduino for furthar processing
 
 # Import packages
 #version 1.1
@@ -256,13 +257,13 @@ while True:
             
                 
                 # Draw bounding box and label
-                cv2.rectangle(frame, (xmin,ymin), (xmax,ymax), (10, 255, 0), 2)
+                #cv2.rectangle(frame, (xmin,ymin), (xmax,ymax), (10, 255, 0), 2)
                 object_name = labels[int(classes[i])]
                 label = '%s: %d%%' % (object_name, int(scores[i]*100))
                 labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
                 label_ymin = max(ymin, labelSize[1] + 10)
-                cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED)
-                cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
+                #cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED)
+                #cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
 
 
     # Draw framerate in corner of frame
@@ -286,13 +287,12 @@ while True:
 
     
     #you will need to edit this object name check to something that actually exists in the TensorFlow model
-    direction = ""
+    direction = "" #using to send data to arduino
 
     center_margin = 80  # Margin around the center of the frame to consider the object as "centered"
 
     if object_name in ["person", "car", "truck", "bicycle"]:
         
-
         #GPIO.output(11, GPIO.HIGH)
         if abs(object_center_x - frame_center_x) < center_margin:
             direction = "C"  # Object is relatively in the center
@@ -302,7 +302,7 @@ while True:
             direction = "L"  # Object is on the left
 
         
-        send_data_to_arduino(direction, box_sizes)
+        send_data_to_arduino(direction, box_sizes) #using to show output on handle bar
         
         if direction == "C":
             if box_sizes < far_threshold:
