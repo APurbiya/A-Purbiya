@@ -273,8 +273,8 @@ while True:
 
     #------------------------------------------------------------ADDED-------------------------------------------------------------
     # Define thresholds for bounding box sizes (in pixels)
-    far_threshold = 2325  # Example threshold for far distance
-    near_threshold = 20000  # Example threshold for near distance
+    far_threshold = 5000  # Example threshold for far distance
+    near_threshold = 200000  # Example threshold for near distance
 
     # Get the height of the bounding box (assuming it's a square box)
     box_width = xmax - xmin  # Calculate the height of the bounding box
@@ -288,7 +288,7 @@ while True:
     #you will need to edit this object name check to something that actually exists in the TensorFlow model
     direction = ""
 
-    center_margin = 50  # Margin around the center of the frame to consider the object as "centered"
+    center_margin = 80  # Margin around the center of the frame to consider the object as "centered"
 
     if object_name in ["person", "car", "truck", "bicycle"]:
         
@@ -342,8 +342,8 @@ while True:
 
             else:
                 GPIO.output(15, GPIO.HIGH) #blue
-                GPIO.output(11, GPIO.LOW) #red
-                GPIO.output(13, GPIO.HIGH) #green
+                GPIO.output(11, GPIO.HIGH) #green
+                GPIO.output(13, GPIO.LOW) #red
 
                 GPIO.output(8, GPIO.LOW) #green
                 GPIO.output(10, GPIO.HIGH) #red
@@ -351,7 +351,7 @@ while True:
 
                 time.sleep(0.2)
 
-                GPIO.output(11, GPIO.HIGH) #red
+                GPIO.output(13, GPIO.HIGH) #red
                 GPIO.output(8, GPIO.HIGH) #red
                 print(f"r")
 
@@ -408,8 +408,8 @@ while True:
                 GPIO.output(12, GPIO.HIGH)#blue
                 
                 GPIO.output(15, GPIO.HIGH)#blue
-                GPIO.output(11, GPIO.HIGH)#red
-                GPIO.output(13, GPIO.LOW)#green
+                GPIO.output(11, GPIO.LOW)#green
+                GPIO.output(13, GPIO.HIGH)#red
 
                 time.sleep(0.5)
                 GPIO.output(15, GPIO.HIGH)#blue
@@ -419,7 +419,7 @@ while True:
                 GPIO.output(8, GPIO.HIGH)#green
                 GPIO.output(10, GPIO.HIGH)#red
                 GPIO.output(12, GPIO.HIGH)#blue
-                print(f"g")
+                print(f"1")
             elif far_threshold <= box_sizes < near_threshold:
                 GPIO.output(15, GPIO.LOW)#blue
                 GPIO.output(11, GPIO.HIGH)#red
@@ -433,10 +433,11 @@ while True:
 
                 GPIO.output(12, GPIO.HIGH)#blue
                 GPIO.output(15, GPIO.HIGH)#blue
+                print(f"2")
             else:
                 GPIO.output(15, GPIO.HIGH) #blue
-                GPIO.output(11, GPIO.LOW) #red
-                GPIO.output(13, GPIO.HIGH) #green
+                GPIO.output(11, GPIO.HIGH) #Green
+                GPIO.output(13, GPIO.LOW) #red
 
                 GPIO.output(8, GPIO.HIGH) #green
                 GPIO.output(10, GPIO.HIGH) #red
@@ -444,9 +445,10 @@ while True:
 
                 time.sleep(0.2)
 
-                GPIO.output(11, GPIO.HIGH) #red
+                GPIO.output(13, GPIO.HIGH) #red
                 GPIO.output(8, GPIO.HIGH) #red
                 print(f"r")
+                print(f"3")
                 
     else:
         direction = "X"
