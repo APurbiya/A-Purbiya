@@ -2,6 +2,7 @@
 
 #define LED_PIN     9
 #define NUM_LEDS    12
+#define BUZZER_PIN  12
 
 Adafruit_NeoPixel strip(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
 
@@ -10,6 +11,8 @@ char direction;
 int boxSize;
 unsigned long previousMillis = 0;
 const long interval = 500; // Flash interval in milliseconds
+unsigned long buzzerInterval;
+unsigned long previousBuzzerMillis = 0;
 
 void setup() {
   strip.begin();
@@ -17,6 +20,10 @@ void setup() {
   
   // Start serial communication
   Serial.begin(9600);
+  
+  // Initialize the buzzer pin
+  pinMode(BUZZER_PIN, OUTPUT);
+  digitalWrite(BUZZER_PIN, LOW);
 }
 
 void loop() {
@@ -51,8 +58,13 @@ void loop() {
         strip.setPixelColor(i, getColor(boxSize));
       }
     }
-    else if (direction == 'X')
-    {
+    else if(direction == 'C') {
+      // Turn on lights 0-11
+      for (int i = 0; i < NUM_LEDS; i++) {
+        strip.setPixelColor(i, getColor(boxSize));
+      }
+    }
+    else if (direction == 'X') {
       for (int i = 0; i < 11; i++) {
         strip.setPixelColor(i, strip.Color(255, 0, 0));
       }
@@ -82,15 +94,29 @@ void loop() {
       strip.show();
     }
   }
+
+  // Buzzer control based on box size
+  if (boxSize > 0) {
+    unsigned long currentBuzzerMillis = millis();
+    buzzerInterval = map(boxSize, 1, 200000, 1000, 100); // Map boxSize to a range of 1000ms to 100ms
+
+    if (currentBuzzerMillis - previousBuzzerMillis >= buzzerInterval) {
+      // Toggle the buzzer
+      digitalWrite(BUZZER_PIN, !digitalRead(BUZZER_PIN));
+      previousBuzzerMillis = currentBuzzerMillis;
+    }
+  } else {
+    digitalWrite(BUZZER_PIN, LOW);
+  }
 }
 
 // Function to determine LED color based on box size
 uint32_t getColor(int boxSize) {
-  if (boxSize > 2000) {
+  if (boxSize > 5000) {
     Serial.println("Green");
     return strip.Color(0, 255, 0); // Green
   } 
-  else if (boxSize < 7000 && boxSize > 2001) {
+  else if (boxSize < 199999 && boxSize > 5001) {
     Serial.println("Yellow");
     return strip.Color(255, 255, 0); // Yellow
   } 
