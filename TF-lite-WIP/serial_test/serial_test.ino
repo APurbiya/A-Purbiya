@@ -96,16 +96,23 @@ void loop() {
   }
 
   // Buzzer control based on box size
-  if (boxSize > 0) {
-    unsigned long currentBuzzerMillis = millis();
-    buzzerInterval = map(boxSize, 1, 200000, 1000, 100); // Map boxSize to a range of 1000ms to 100ms
-
-    if (currentBuzzerMillis - previousBuzzerMillis >= buzzerInterval) {
-      // Toggle the buzzer
-      digitalWrite(BUZZER_PIN, !digitalRead(BUZZER_PIN));
-      previousBuzzerMillis = currentBuzzerMillis;
-    }
-  } else {
+  if(boxSize == 0)
+  {
+     digitalWrite(BUZZER_PIN, LOW);
+  }
+  else if (boxSize > 6000) {
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(10);
+    digitalWrite(BUZZER_PIN, LOW);
+  } 
+  else if (boxSize < 199999 && boxSize > 6000) {
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(50);
+    digitalWrite(BUZZER_PIN, LOW);
+  } 
+  else {
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(100);
     digitalWrite(BUZZER_PIN, LOW);
   }
 }
