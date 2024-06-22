@@ -1,4 +1,4 @@
- #include <UTFT.h> 
+#include <UTFT.h> 
 #include <URTouch.h>
 #include <EEPROM.h>
 
@@ -42,7 +42,7 @@ void setup() {
 
 void loop() {
     xP=xP-movingRate; // xP - x coordinate of the pilars; range: 319 - (-51)   
-    //drawPilars(xP, yP); // Draws the pillars 
+    drawPilars(xP, yP); // Draws the pillars 
     
     // yB - y coordinate of the bird which depends on value of the fallingRate variable
     yB+=fallRateInt; 
@@ -51,13 +51,13 @@ void loop() {
     
     // Checks for collision
     if(yB>=180 || yB<=0){ // top and bottom
-      //gameOver();
+      gameOver();
     }
     if((xP<=85) && (xP>=5) && (yB<=yP-2)){ // upper pillar
-      //gameOver();
+      gameOver();
     }
     if((xP<=85) && (xP>=5) && (yB>=yP+60)){ // lower pillar
-      //gameOver();
+      gameOver();
     }
     
     // Draws the bird
@@ -85,7 +85,6 @@ void loop() {
       movingRate++;
     }
 }
-
 // ===== initiateGame - Custom Function
 void initiateGame() {
   myGLCD.clrScr();
@@ -140,6 +139,51 @@ void initiateGame() {
   myGLCD.fillRect(85, 100, 235, 116);
   
 }
+// ===== drawPlillars - Custom Function
+void drawPilars(int x, int y) {
+    if (x>=270){
+      myGLCD.setColor(0, 200, 20);
+      myGLCD.fillRect(318, 0, x, y-1);
+      myGLCD.setColor(0, 0, 0);
+      myGLCD.drawRect(319, 0, x-1, y);
+
+      myGLCD.setColor(0, 200, 20);
+      myGLCD.fillRect(318, y+81, x, 203);
+      myGLCD.setColor(0, 0, 0);
+      myGLCD.drawRect(319, y+80, x-1, 204); 
+    }
+    else if( x<=268) {
+      // Draws blue rectangle right of the pillar
+      myGLCD.setColor(114, 198, 206);
+      myGLCD.fillRect(x+51, 0, x+60, y);
+      // Draws the pillar
+      myGLCD.setColor(0, 200, 20);
+      myGLCD.fillRect(x+49, 1, x+1, y-1);
+      // Draws the black frame of the pillar
+      myGLCD.setColor(0, 0, 0);
+      myGLCD.drawRect(x+50, 0, x, y);
+      // Draws the blue rectangle left of the pillar
+      myGLCD.setColor(114, 198, 206);
+      myGLCD.fillRect(x-1, 0, x-3, y);
+
+      // The bottom pillar
+      myGLCD.setColor(114, 198, 206);
+      myGLCD.fillRect(x+51, y+80, x+60, 204);
+      myGLCD.setColor(0, 200, 20);
+      myGLCD.fillRect(x+49, y+81, x+1, 203);
+      myGLCD.setColor(0, 0, 0);
+      myGLCD.drawRect(x+50, y+80, x, 204);
+      myGLCD.setColor(114, 198, 206);
+      myGLCD.fillRect(x-1, y+80, x-3, 204);
+  }
+  // Draws the score
+  myGLCD.setColor(0, 0, 0);
+  myGLCD.setBackColor(221, 216, 148);
+  myGLCD.setFont(BigFont);
+  myGLCD.printNumI(score, 100, 220);
+}
+
+//====== drawBird() - Custom Function
 void drawBird(int y) {
   // Draws the bird - bitmap
   myGLCD.drawBitmap (50, y, 35, 30, bird01);
@@ -147,4 +191,38 @@ void drawBird(int y) {
   myGLCD.setColor(114, 198, 206);
   myGLCD.fillRoundRect(50,y,85,y-6);
   myGLCD.fillRoundRect(50,y+30,85,y+36);
+}
+//======== gameOver() - Custom Function
+void gameOver() {
+  delay(3000); // 1 second
+  // Clears the screen and prints the text
+  myGLCD.clrScr();
+  myGLCD.setColor(255, 255, 255);
+  myGLCD.setBackColor(0, 0, 0);
+  myGLCD.setFont(BigFont);
+  myGLCD.print("GAME OVER", CENTER, 40);
+  myGLCD.print("Score:", 100, 80);
+  myGLCD.printNumI(score,200, 80);
+  myGLCD.print("Restarting...", CENTER, 120);
+  myGLCD.setFont(SevenSegNumFont);
+  myGLCD.printNumI(2,CENTER, 150);
+  delay(1000);
+  myGLCD.printNumI(1,CENTER, 150);
+  delay(1000);
+  
+  // Writes the highest score in the EEPROM
+  if (score > highestScore) {
+    highestScore = score;
+    EEPROM.write(0,highestScore);
+  }
+  // Resets the variables to start position values
+  xP=319;
+  yB=50;
+  fallRate=0;
+  score = 0;
+  lastSpeedUpScore = 0;
+  movingRate = 3;  
+  gameStarted = false;
+  // Restart game
+  initiateGame();
 }
