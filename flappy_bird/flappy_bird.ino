@@ -50,7 +50,7 @@ void loop() {
     fallRateInt= int(fallRate);
     
     // Checks for collision
-    if(yB>=180 || yB<=0){ // top and bottom
+    if(yB>=180 || yB<=10){ // top and bottom
       gameOver();
     }
     if((xP<=85) && (xP>=5) && (yB<=yP-2)){ // upper pillar
@@ -92,13 +92,13 @@ void initiateGame() {
   myGLCD.setColor(114, 198, 206);
   myGLCD.fillRect(0,0,319,239);
   // Ground
-  myGLCD.setColor(221,216,148);
+  myGLCD.setColor(152, 227, 150);
   myGLCD.fillRect(0, 215, 319, 239);
   myGLCD.setColor(47,175,68);
   myGLCD.fillRect(0, 205, 319, 214);
   // Text
   myGLCD.setColor(0, 0, 0);
-  myGLCD.setBackColor(221, 216, 148);
+  myGLCD.setBackColor(152, 227, 150);
   myGLCD.setFont(BigFont);
   myGLCD.print("Score:",5,220);
   myGLCD.setFont(SmallFont);
@@ -107,9 +107,9 @@ void initiateGame() {
   myGLCD.setBackColor(114, 198, 206);
   myGLCD.print("Highest Score: ",5,5);
   myGLCD.printNumI(highestScore, 120, 6);
-  myGLCD.print(">RESET<",255,5);
+  myGLCD.print("SET 0",255,5);
   myGLCD.drawLine(0,23,319,23);
-  myGLCD.print("TAP TO START",CENTER,100);
+  myGLCD.print("PRESS TO START",CENTER,100);
   
   drawBird(yB); // Draws the bird
   
@@ -142,12 +142,12 @@ void initiateGame() {
 // ===== drawPlillars - Custom Function
 void drawPilars(int x, int y) {
     if (x>=270){
-      myGLCD.setColor(0, 200, 20);
+      myGLCD.setColor(5, 252, 104);
       myGLCD.fillRect(318, 0, x, y-1);
       myGLCD.setColor(0, 0, 0);
       myGLCD.drawRect(319, 0, x-1, y);
 
-      myGLCD.setColor(0, 200, 20);
+      myGLCD.setColor(5, 252, 104);
       myGLCD.fillRect(318, y+81, x, 203);
       myGLCD.setColor(0, 0, 0);
       myGLCD.drawRect(319, y+80, x-1, 204); 
@@ -157,7 +157,7 @@ void drawPilars(int x, int y) {
       myGLCD.setColor(114, 198, 206);
       myGLCD.fillRect(x+51, 0, x+60, y);
       // Draws the pillar
-      myGLCD.setColor(0, 200, 20);
+      myGLCD.setColor(5, 252, 104);
       myGLCD.fillRect(x+49, 1, x+1, y-1);
       // Draws the black frame of the pillar
       myGLCD.setColor(0, 0, 0);
@@ -197,14 +197,16 @@ void gameOver() {
   delay(3000); // 1 second
   // Clears the screen and prints the text
   myGLCD.clrScr();
-  myGLCD.setColor(255, 255, 255);
-  myGLCD.setBackColor(0, 0, 0);
+  myGLCD.setColor(0, 0, 255);
+  myGLCD.setBackColor(222, 13, 13);
   myGLCD.setFont(BigFont);
-  myGLCD.print("GAME OVER", CENTER, 40);
+  myGLCD.print("WOMP WOMP", CENTER, 40);
   myGLCD.print("Score:", 100, 80);
   myGLCD.printNumI(score,200, 80);
-  myGLCD.print("Restarting...", CENTER, 120);
+  myGLCD.print("Trying again...", CENTER, 120);
   myGLCD.setFont(SevenSegNumFont);
+  myGLCD.printNumI(3,CENTER, 150);
+  delay(500);
   myGLCD.printNumI(2,CENTER, 150);
   delay(1000);
   myGLCD.printNumI(1,CENTER, 150);
