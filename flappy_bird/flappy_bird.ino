@@ -96,7 +96,7 @@ void setup() {
   }
      myFiles.load(0, 0, 320, 240, "img_1.RAW", 1, 0); 
   drawHomeScreen();
-  //myGLCD.setBrightness(16);                
+  myGLCD.setBrightness(16);                
   myGLCD.drawRoundRect (10, 10, 60, 36); // Draws rounded rectangle without a fill, so the overall appearance of the button looks like it has a frame
       myGLCD.setFont(SmallFont); // Sets the font to big
       myGLCD.setBackColor(225, 0, 0); // Sets the background color of the area where the text will be printed to green, same as the button
@@ -1526,36 +1526,56 @@ void game7(){
 
 
 void game8 (){
-  
- int  brightness = 0;
- myGLCD.setBrightness(16);
+   myTouch.read();
+    x = myTouch.getX();
+    y = myTouch.getY();
+  int xx = 120;
+  int yy = 180;
+  int avx;
+  int avy;
+  int c = 1;
+ 
+      myGLCD.drawRoundRect (10, 10, 60, 36); // Draws rounded rectangle without a fill, so the overall appearance of the button looks like it has a frame
+      myGLCD.setFont(SmallFont); // Sets the font to big
+      myGLCD.setBackColor(225, 0, 0); // Sets the background color of the area where the text will be printed to green, same as the button
+      myGLCD.print("Back", CENTER, 10); // Prints the string 
+      drawFrame(10, 10, 60, 36);
+myGLCD.drawCircle(120, 180, 10);
+myGLCD.setColor(255, 255, 225);
+myGLCD.fillRect(0, 200, 319, 239);
+myGLCD.setBackColor(225, 255, 255);
+myGLCD.setColor(0, 0, 0);
 
-  myGLCD.setColor(225, 0, 0);
-  myGLCD.fillRoundRect (5, 140, 155, 180);
-  myGLCD.setColor(255, 255, 102);
-  myGLCD.drawRoundRect (5, 140, 155, 180);
-  myGLCD.setFont(SmallFont);
-  myGLCD.setBackColor(225, 0, 0);
-  myGLCD.print("  +", LEFT, 152);
+myGLCD.setColor(0, 0, 255);
+myGLCD.drawCircle(250, 150, 5);
+
+while(c<10){
+  avx = analogRead(X_pin);
+  avy = analogRead(Y_pin);
+
+myGLCD.setColor(0,0,0);
+myGLCD.drawCircle(xx, yy, 10);
+myGLCD.fillCircle(xx, yy, 10);
+
+myGLCD.print("Score", LEFT, 210);
+  if (avy > 550) {
+    xx--;
+  }
+  if (avy < 450) {
+    xx++;
+  }
+    if (avx > 550) {
+    yy ++;
+  }
+  if (avx < 450) {
+    yy--;
+  }
 
 
-  myGLCD.setColor(225, 0, 0);
-  myGLCD.fillRoundRect (165, 140, 315, 180);
-  myGLCD.setColor(255, 255, 102);
-  myGLCD.drawRoundRect (165, 140, 315, 180);
-  myGLCD.setFont(SmallFont);
-  myGLCD.setBackColor(225, 0, 0);
-  myGLCD.print("  -", RIGHT, 152);
-  
+myGLCD.setColor(0,255,0);
+myGLCD.drawCircle(xx, yy, 10);
+myGLCD.fillCircle(xx, yy, 10);
 
-      if ((x >= 5) && (x <= 165) && (y >= 190) && (y <= 230)) {
-       brightness ++;
-       myGLCD.setBrightness(+1);
-      }
-      if ((x >= 165) && (x <= 315) && (y >= 140) && (y <= 180)) {
-       brightness --;
-       myGLCD.setBrightness(-1);
-      }
 buttonState = digitalRead(button);
     if (buttonState == HIGH) {
      
@@ -1565,16 +1585,15 @@ buttonState = digitalRead(button);
         gameNumber = 0; // Indicates we are at home screen
         myGLCD.clrScr();;
         drawHomeScreen(); // Draws the home screen  
-       
-       
+        break;   
     }
 
       
 
 
 }     
-
        
   
 
     
+}
