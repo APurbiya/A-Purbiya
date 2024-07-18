@@ -12,3 +12,7 @@ and did print setup
 ![image](https://github.com/user-attachments/assets/37eebad6-150c-4ae7-92bc-5e0c7e32c009)
 ![image](https://github.com/user-attachments/assets/d10a453e-b96f-46d4-98d3-72d5ba9cfcf5)
 
+7/18 Reprinting and cleaning the sprocket as the fist one broke
+![image](https://github.com/user-attachments/assets/f5a1e40c-b30a-450f-ab96-b1a3d52bd5f0)
+![image](https://github.com/user-attachments/assets/879ec3e2-73f0-4000-867a-28d1e67d7bde)
+
