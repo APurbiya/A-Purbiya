@@ -7,3 +7,6 @@ https://cad.onshape.com/documents/288e7a5a60435bcef183da8a/w/e593c5bf671830c3735
 7/18 got most of the clips made
 ![image](https://github.com/user-attachments/assets/afd5da8e-8c69-400e-b734-d50cfee7210a)
 
+7/19 made some patterns on the sides and fixed the clips
+![image](https://github.com/user-attachments/assets/538722c4-133d-47c2-b66d-976422416d7c)
+
