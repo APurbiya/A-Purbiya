@@ -15,3 +15,8 @@ https://cad.onshape.com/documents/288e7a5a60435bcef183da8a/w/e593c5bf671830c3735
 ![image](https://github.com/user-attachments/assets/c469accf-fd06-43d5-bd5b-046ba82ba9e5)
 
 
+7/19 cleaned up and tested the size of parts and made changes accordingly
+![image](https://github.com/user-attachments/assets/5438916d-6ae1-4ee9-9f33-29b2e96765ee)
+![image](https://github.com/user-attachments/assets/80d47039-5829-4c7d-9b56-e3645627f5a9)
+
+
