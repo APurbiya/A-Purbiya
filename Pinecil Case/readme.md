@@ -10,3 +10,8 @@ https://cad.onshape.com/documents/288e7a5a60435bcef183da8a/w/e593c5bf671830c3735
 7/19 made some patterns on the sides and fixed the clips
 ![image](https://github.com/user-attachments/assets/538722c4-133d-47c2-b66d-976422416d7c)
 
+7/19 cut some of the parts up to print and test size,
+![image](https://github.com/user-attachments/assets/37712518-cb08-4707-b922-97d3209af66b)
+![image](https://github.com/user-attachments/assets/c469accf-fd06-43d5-bd5b-046ba82ba9e5)
+
+
