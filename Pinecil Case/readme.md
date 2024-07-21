@@ -29,6 +29,10 @@ https://cad.onshape.com/documents/288e7a5a60435bcef183da8a/w/e593c5bf671830c3735
 7/21 started assebly
 ![image](https://github.com/user-attachments/assets/2b4d474b-6b9d-42ea-a218-83f2265b5de3)
 
+7/21 all done
+![image](https://github.com/user-attachments/assets/8c827869-6ce4-497c-bee2-1c45271bd204)
+
+
 
 
 
