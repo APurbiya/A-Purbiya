@@ -24,7 +24,13 @@ https://cad.onshape.com/documents/288e7a5a60435bcef183da8a/w/e593c5bf671830c3735
 ![image](https://github.com/user-attachments/assets/24423e6d-6f86-4f68-8676-6546a5c3af8d)
 
 7/20 cleaned up the last parts and ready for assembly
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/ea30fac7-e166-47bc-926b-6249e9339b7f)
+
+7/21 started assebly
+![image](https://github.com/user-attachments/assets/2b4d474b-6b9d-42ea-a218-83f2265b5de3)
+
+
+
 
 
 
