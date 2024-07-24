@@ -41,6 +41,10 @@ https://www.printables.com/model/950351-pinecil-pine64-case-stand
 7/23 updated clip design
 ![Screenshot 2024-07-23 113234](https://github.com/user-attachments/assets/eb864107-89b7-4de8-93a3-56487a2e7844)
 
+7/24 these clips are much better
+![image](https://github.com/user-attachments/assets/16358fd4-7661-4be5-928d-adfc0c15703b)
+
+
 
 
 
