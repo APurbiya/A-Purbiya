@@ -10,4 +10,8 @@ https://cad.onshape.com/documents/332490d4bdf0abb3caf17662/w/7e2359d6ea39b52803f
 7/26 started cad for the powerbank in onshape
 ![image](https://github.com/user-attachments/assets/9130d144-10f4-46d2-8491-3bf67edda393)
 
+7/26 working on cad for powerbank module
+![image](https://github.com/user-attachments/assets/0fbb6e28-c49a-452a-a415-69dab3dbb63d)
+
+
 
