@@ -1,4 +1,8 @@
 # TensorFlow Lite Object Detection on Android and Raspberry Pi
+https://cad.onshape.com/documents/9705b9fba6ff033fb0240052/w/b2281bc798a1e4d5b26ffbd4/e/0e160a5e9fa38effef129fef?renderMode=0&uiState=66a5237d5aa112772e99c174
+This is the case for the raspberry pi
+![image](https://github.com/user-attachments/assets/5c906bf7-5436-48ea-b37e-cf273d87882f)
+
 Train your own TensorFlow Lite object detection models and run them on the Raspberry Pi, Android phones, and other edge devices! 
 
 <p align="center">
