@@ -20,4 +20,10 @@ https://cad.onshape.com/documents/332490d4bdf0abb3caf17662/w/7e2359d6ea39b52803f
 7/28 cleaned up the test print and realized that I need to fix the tolerances
 ![image](https://github.com/user-attachments/assets/f56e3bf3-5b44-47e9-9e01-5dfccfc3674b)
 
+7/28 fixed the tolerances and setup for another test print 
+![image](https://github.com/user-attachments/assets/8a865882-f916-4544-b26c-4ca3ed5e8313)
+![image](https://github.com/user-attachments/assets/418dbfc5-80d8-4e4b-ab23-8b4de7840b5f)
+
+
+
 
