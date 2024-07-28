@@ -13,5 +13,8 @@ https://cad.onshape.com/documents/332490d4bdf0abb3caf17662/w/7e2359d6ea39b52803f
 7/26 working on cad for powerbank module
 ![image](https://github.com/user-attachments/assets/0fbb6e28-c49a-452a-a415-69dab3dbb63d)
 
+7/27 working on tolerances and prep for test print
+![image](https://github.com/user-attachments/assets/2f2df8b8-bee9-49c0-bb42-02a3df414b8d)
+![Screenshot 2024-07-27 174058](https://github.com/user-attachments/assets/7fa817eb-722b-434d-aae6-464115c081ab)
 
 
