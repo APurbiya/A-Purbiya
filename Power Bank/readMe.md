@@ -24,6 +24,9 @@ https://cad.onshape.com/documents/332490d4bdf0abb3caf17662/w/7e2359d6ea39b52803f
 ![image](https://github.com/user-attachments/assets/8a865882-f916-4544-b26c-4ca3ed5e8313)
 ![image](https://github.com/user-attachments/assets/418dbfc5-80d8-4e4b-ab23-8b4de7840b5f)
 
+7/29 ran a test print and fixed cad ready for final print
+![image](https://github.com/user-attachments/assets/b8a09d7d-7f54-481c-b723-242f71c283dc)
+
 
 
 
