@@ -15,3 +15,6 @@ cable hole in back, there is also a lid
 ![image](https://github.com/APurbiya/A-Purbiya/assets/130509544/e8d4f1a3-de33-4cce-b84a-12ba055c8ad3)
 ![image](https://github.com/APurbiya/A-Purbiya/assets/130509544/7e3fee48-38b2-45cb-bcdf-d7b8fcd0d86b)
 
+
+7/29 created the hose to fill up floaty
+![image](https://github.com/user-attachments/assets/a5bfe283-a187-451a-9d11-ad444e40864a)
