@@ -27,6 +27,14 @@ https://cad.onshape.com/documents/332490d4bdf0abb3caf17662/w/7e2359d6ea39b52803f
 7/29 ran a test print and fixed cad ready for final print
 ![image](https://github.com/user-attachments/assets/b8a09d7d-7f54-481c-b723-242f71c283dc)
 
+7/30 changed the resin in the vat from grey to creal sliced the part and started the print
+
+![Screenshot 2024-07-30 100238](https://github.com/user-attachments/assets/07ccf9bb-408f-4620-b6eb-4d3742c388a5)
+
+![Screenshot 2024-07-30 104036](https://github.com/user-attachments/assets/e70bab19-76e0-49e5-bb6e-3379dc9957b8)
+![Screenshot 2024-07-30 100551](https://github.com/user-attachments/assets/727612e9-43ec-4902-8d64-05307c2567aa)
+
+
 
 
 
