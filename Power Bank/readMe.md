@@ -34,7 +34,10 @@ https://cad.onshape.com/documents/332490d4bdf0abb3caf17662/w/7e2359d6ea39b52803f
 ![Screenshot 2024-07-30 104036](https://github.com/user-attachments/assets/e70bab19-76e0-49e5-bb6e-3379dc9957b8)
 ![Screenshot 2024-07-30 100551](https://github.com/user-attachments/assets/727612e9-43ec-4902-8d64-05307c2567aa)
 
-
+7/31 cleaned up the print found a little section that was blown out so cut up a part to glue there
+![Screenshot 2024-07-31 083230](https://github.com/user-attachments/assets/595529cb-396f-4147-9555-d1c0e53cb7ca)
+![Screenshot 2024-07-31 091609](https://github.com/user-attachments/assets/54da3331-f80e-4c9d-a55b-678f7b5fe7b2)
+![Screenshot 2024-07-31 082228](https://github.com/user-attachments/assets/32f9e9a8-f1bb-4cf3-be84-a3e33db46a35)
 
 
 
