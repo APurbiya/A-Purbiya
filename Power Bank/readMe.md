@@ -39,5 +39,11 @@ https://cad.onshape.com/documents/332490d4bdf0abb3caf17662/w/7e2359d6ea39b52803f
 ![Screenshot 2024-07-31 091609](https://github.com/user-attachments/assets/54da3331-f80e-4c9d-a55b-678f7b5fe7b2)
 ![Screenshot 2024-07-31 082228](https://github.com/user-attachments/assets/32f9e9a8-f1bb-4cf3-be84-a3e33db46a35)
 
+7/31 printed and cleaned and glued the little corner part of, after which I wet sanded with some resin and then spray painted it
+![image](https://github.com/user-attachments/assets/98450448-071d-4374-920d-8c85fd831343)
+![image](https://github.com/user-attachments/assets/81c69418-a1f8-43f3-beab-a38b8f486123)
+![image](https://github.com/user-attachments/assets/f20d1d2f-868f-4d89-ae89-c68866d83b9e)
+
+
 
 
